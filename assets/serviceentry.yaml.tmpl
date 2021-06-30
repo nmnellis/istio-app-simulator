@@ -1,0 +1,17 @@
+{{- range $service := . }}
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: {{ $service }}
+  namespace: istio-system
+spec:
+  hosts:
+  - {{ $service }}
+  location: MESH_EXTERNAL
+  ports:
+  - number: 443
+    name: https
+    protocol: TLS
+  resolution: DNS
+---
+{{- end }}

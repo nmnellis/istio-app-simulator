@@ -1,0 +1,30 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ingress-gw
+  namespace: istio-system
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - istio-ingressgateway
+  http:
+{{- range $namespace,$microservices := .}}
+{{- range $microservice := $microservices}}
+{{- if $microservice.TopTier}}
+  - name: "{{$microservice.Namespace}}"
+    match:
+    - uri:
+        prefix: "/{{$microservice.Namespace}}"
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: {{$microservice.Name}}.{{$microservice.Namespace}}.svc.cluster.local
+        port:
+          number: 8080
+{{- end }}
+{{- end }}
+{{- end }}
+---

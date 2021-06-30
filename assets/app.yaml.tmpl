@@ -1,0 +1,80 @@
+{{range $namespace,$microservices := .}}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{$namespace}}
+  labels:
+    istio-injection: enabled
+---
+{{range $microservice := $microservices}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{$microservice.Name}}
+  namespace: {{$microservice.Namespace}}
+  labels:
+    app: {{$microservice.Name}}
+    tier: "{{$microservice.Tier}}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{$microservice.Name}}
+  namespace: {{$microservice.Namespace}}
+  labels:
+    app: {{$microservice.Name}}
+    tier: "{{$microservice.Tier}}"
+spec:
+  selector:
+    app: {{$microservice.Name}}
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+---
+{{range $version := $microservice.Versions}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{$microservice.Name}}-{{$version}}
+  namespace: {{$microservice.Namespace}}
+  labels:
+    app: {{$microservice.Name}}
+    version: {{$version}}
+    tier: "{{$microservice.Tier}}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: {{$microservice.Name}}
+        version: {{$version}}
+  template:
+    metadata:
+      labels:
+        app: {{$microservice.Name}}
+        version: {{$version}}
+      # annotations:
+    spec:
+      serviceAccountName: {{$microservice.Name}}
+      containers:
+      - name: {{$microservice.Name}}
+        image: nicholasjackson/fake-service:v0.7.8
+        ports:
+        - containerPort: 8080
+        env:
+        - name: "LISTEN_ADDR"
+          value: "0.0.0.0:8080"
+        - name: "NAME"
+          value: "{{$microservice.Name}}-{{$version}}"
+        - name: "SERVER_TYPE"
+          value: "http"
+        - name: "MESSAGE"
+          value: "Hello From {{$microservice.Name}} ({{$version}})!"
+        - name: "UPSTREAM_URIS"
+          value: "{{ genUpstream $microservice.Backends $microservice.ExternalServices }}"
+---
+{{- end }}
+{{- end }}
+{{- end }}
