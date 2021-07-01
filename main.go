@@ -13,10 +13,10 @@ import (
 )
 
 const (
-	NumberOfNamespaces  = 2
+	NumberOfNamespaces  = 5
 	NumberOfTiers       = 5
 	MaxAppsPerTier      = 5
-	ChanceOfVersions    = 5 // 0-100
+	ChanceOfVersions    = 10 // 0-100
 	maxAmountOfVersions = 3
 	// TODO not implemented yet
 	ChanceOfCrossNamespaceChatter = 10  // 0-100
