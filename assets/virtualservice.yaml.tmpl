@@ -17,8 +17,6 @@ spec:
     match:
     - uri:
         prefix: "/{{$microservice.Namespace}}"
-    rewrite:
-      uri: "/"
     route:
     - destination:
         host: {{$microservice.Name}}.{{$microservice.Namespace}}.svc.cluster.local

@@ -13,13 +13,13 @@ import (
 )
 
 const (
-	NumberOfNamespaces  = 1
+	NumberOfNamespaces  = 2
 	NumberOfTiers       = 5
 	MaxAppsPerTier      = 5
 	ChanceOfVersions    = 5 // 0-100
 	maxAmountOfVersions = 3
 	// TODO not implemented yet
-	ChanceOfCrossNamespaceChatter = 5   // 0-100
+	ChanceOfCrossNamespaceChatter = 10  // 0-100
 	ChanceOfErrors                = 5   // 0-100
 	ErrorPercent                  = .05 // 0 - 1
 	ChanceToCallExternalService   = 0   // 0-100
@@ -54,10 +54,10 @@ var (
 )
 
 func main() {
-
-	namespaces := map[string][]*Microservice{}
+	rand.Seed(time.Now().UnixNano())
 	// generate namespaces
 	// namespace names will be very simple ns1, ns2 etc
+	var microservices []*Microservice
 	for i := 1; i <= NumberOfNamespaces; i++ {
 		namespaceName := fmt.Sprintf("ns-%d", i)
 
@@ -89,11 +89,49 @@ func main() {
 				}
 			}
 		}
-		namespaces[namespaceName] = flattenTiers(tiers)
+		microservices = append(microservices, flattenTiers(tiers)...)
 	}
-	// bytes, _ := json.MarshalIndent(namespaces, "", "  ")
-	// fmt.Println(string(bytes))
-	render(namespaces)
+
+	// shuffle microservices to setup cross namespace calls
+	rand.Shuffle(len(microservices), func(i, j int) { microservices[i], microservices[j] = microservices[j], microservices[i] })
+
+	for _, ms := range microservices {
+		i := rand.Intn(100) + 1
+		if i <= ChanceOfCrossNamespaceChatter {
+			// microservice should call another one from a different namespace
+			giveUpAttempts := len(microservices)
+			foundBackend := false
+			for !foundBackend {
+				// randomly grab a microservice and see if its compatible. we will give up after so many tries
+				msIndex := rand.Intn(len(microservices))
+				foundMs := microservices[msIndex]
+				if foundMs.Namespace != ms.Namespace && foundMs.Tier > ms.Tier {
+					foundBackend = true
+					ms.Backends = append(ms.Backends, &Backend{
+						Name:      foundMs.Name,
+						Namespace: foundMs.Namespace,
+					})
+				}
+				giveUpAttempts--
+				if giveUpAttempts < 1 {
+					// there are lots of reasons why a backend might not be found, the ms is in the bottom tier
+					// there are no apps in other namespaces etc
+					// fmt.Println("giving up finding backend ")
+					foundBackend = true
+				}
+			}
+		}
+	}
+
+	render(groupMicroservicesByNamespace(microservices))
+}
+
+func groupMicroservicesByNamespace(microservices []*Microservice) map[string][]*Microservice {
+	namespaces := map[string][]*Microservice{}
+	for _, ms := range microservices {
+		namespaces[ms.Namespace] = append(namespaces[ms.Namespace], ms)
+	}
+	return namespaces
 }
 
 func render(microservices map[string][]*Microservice) {
