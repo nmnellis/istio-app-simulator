@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	NumberOfNamespaces  = 5
+	NumberOfNamespaces  = 1
 	NumberOfTiers       = 5
 	MaxAppsPerTier      = 5
 	ChanceOfVersions    = 10 // 0-100
@@ -22,7 +22,7 @@ const (
 	ChanceOfCrossNamespaceChatter = 10  // 0-100
 	ChanceOfErrors                = 5   // 0-100
 	ErrorPercent                  = .05 // 0 - 1
-	ChanceToCallExternalService   = 0   // 0-100
+	ChanceToCallExternalService   = 10  // 0-100
 )
 
 var (
@@ -137,16 +137,22 @@ func groupMicroservicesByNamespace(microservices []*Microservice) map[string][]*
 func render(microservices map[string][]*Microservice) {
 
 	testTemplate, err := template.New("template").Funcs(template.FuncMap{
-		"genUpstream": func(backends []*Backend, externalServices []string) string {
-			hostnames := externalServices
+		"genUpstream": func(backends []*Backend) string {
+			var hostnames []string
 			for _, backend := range backends {
 				hostnames = append(hostnames, fmt.Sprintf("http://%s.%s:8080", backend.Name, backend.Namespace))
 			}
 
 			return strings.Join(hostnames, ",")
 		},
+		"genExternalServices": func(es []string) string {
+			return strings.Join(es, ",")
+		},
 	}).ParseGlob("assets/*")
-
+	if err != nil {
+		log.Println(" template: ", err)
+		return
+	}
 	if _, err := os.Stat("out"); os.IsNotExist(err) {
 		err := os.Mkdir("out", os.ModePerm)
 		if err != nil {

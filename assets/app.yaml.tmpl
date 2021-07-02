@@ -60,7 +60,7 @@ spec:
       serviceAccountName: {{$microservice.Name}}
       containers:
       - name: {{$microservice.Name}}
-        image: nicholasjackson/fake-service:v0.7.8
+        image: ghcr.io/nmnellis/fake-service:v2
         ports:
         - containerPort: 8080
         env:
@@ -73,7 +73,11 @@ spec:
         - name: "MESSAGE"
           value: "Hello From {{$microservice.Name}} ({{$version}})!"
         - name: "UPSTREAM_URIS"
-          value: "{{ genUpstream $microservice.Backends $microservice.ExternalServices }}"
+          value: "{{ genUpstream $microservice.Backends }}"
+{{- if $microservice.ExternalServices}}
+        - name: "EXTERNAL_SERVICE_URIS"
+          value: "{{ genExternalServices $microservice.ExternalServices }}"
+{{- end }}
 ---
 {{- end }}
 {{- end }}
