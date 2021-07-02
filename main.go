@@ -18,7 +18,6 @@ const (
 	MaxAppsPerTier      = 5
 	ChanceOfVersions    = 10 // 0-100
 	maxAmountOfVersions = 3
-	// TODO not implemented yet
 	ChanceOfCrossNamespaceChatter = 10  // 0-100
 	ChanceOfErrors                = 5   // 0-100
 	ErrorPercent                  = .05 // 0 - 1
