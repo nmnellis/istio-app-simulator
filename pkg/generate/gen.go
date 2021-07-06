@@ -170,16 +170,6 @@ func (a *AppGenerator) render(microservices map[string][]*Microservice) error {
 	}
 	log.Println("Generated VirtualService config at " + virtualserviceFile.Name())
 
-	appFile, err := os.Create(a.config.OutputDir + "/app.yaml")
-	if err != nil {
-		log.Println("create file: ", err)
-		return err
-	}
-	if err := testTemplate.ExecuteTemplate(appFile, "app.yaml.tmpl", templateConfig); err != nil {
-		return err
-	}
-	log.Println("Generated App config at " + appFile.Name())
-
 	serviceEntryFile, err := os.Create(a.config.OutputDir + "/serviceentry.yaml")
 	if err != nil {
 		log.Println("create file: ", err)
@@ -190,6 +180,23 @@ func (a *AppGenerator) render(microservices map[string][]*Microservice) error {
 		return err
 	}
 	log.Println("Generated ServiceEntry config at " + serviceEntryFile.Name())
+
+	// generate file per namespace
+	for ns, ms := range microservices {
+		appFile, err := os.Create(a.config.OutputDir + fmt.Sprintf("/app-%s.yaml", ns))
+		if err != nil {
+			log.Println("create file: ", err)
+			return err
+		}
+		if err := testTemplate.ExecuteTemplate(appFile, "app.yaml.tmpl", &AppTemplateConfig{
+			Namespace:     ns,
+			Microservices: ms,
+			Config:        a.config,
+		}); err != nil {
+			return err
+		}
+		log.Printf("Generated App config for namespace %s at %s\n", ns, appFile.Name())
+	}
 
 	return nil
 }

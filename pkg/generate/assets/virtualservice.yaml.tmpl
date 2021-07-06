@@ -16,13 +16,13 @@ spec:
 {{- range $namespace,$microservices := .Microservices}}
 {{- range $microservice := $microservices}}
 {{- if $microservice.TopTier}}
-  - name: "{{$microservice.Namespace}}"
+  - name: "{{ $microservice.Namespace }}"
     match:
     - uri:
-        prefix: "/{{$microservice.Namespace}}"
+        prefix: "/{{ $microservice.Namespace }}"
     route:
     - destination:
-        host: {{$microservice.Name}}.{{$microservice.Namespace}}.svc.cluster.local
+        host: {{ $microservice.Name }}.{{ $microservice.Namespace }}.svc.cluster.local
         port:
           number: 8080
 {{- end }}

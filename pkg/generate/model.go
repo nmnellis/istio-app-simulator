@@ -31,6 +31,11 @@ type TemplateConfig struct {
 	ExternalServices []string
 	Config           *Config
 }
+type AppTemplateConfig struct {
+	Namespace     string
+	Microservices []*Microservice
+	Config        *Config
+}
 
 type Config struct {
 	Seed                          int64
@@ -48,4 +53,13 @@ type Config struct {
 	CPULimit                      string
 	MemoryRequest                 string
 	CPURequest                    string
+	ProxyMemoryLimit              string
+	ProxyCPULimit                 string
+	ProxyMemoryRequest            string
+	ProxyCPURequest               string
+	UpstreamWorkers               int
+	Timing50Percentile            string
+	Timing90Percentile            string
+	Timing99Percentile            string
+	UpstreamTimeout               string
 }
