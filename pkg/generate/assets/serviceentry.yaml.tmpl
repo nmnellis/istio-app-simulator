@@ -1,4 +1,4 @@
-{{ $seed := .Seed }}
+{{ $config := .Config }}
 {{- range $service := .ExternalServices }}
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
@@ -6,7 +6,7 @@ metadata:
   name: {{ $service }}
   namespace: istio-system
   labels:
-    seed: "{{ $seed }}"
+    seed: "{{ $config.Seed }}"
 spec:
   hosts:
   - {{ $service }}

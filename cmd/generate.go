@@ -54,4 +54,13 @@ func init() {
 		"Percent chance that a given application will make a call to an external service (0-100)")
 	generateCmd.Flags().StringVarP(&cfg.OutputDir, "output-dir", "o", "out",
 		"Output directory where assets will be generated")
+
+	generateCmd.Flags().StringVar(&cfg.MemoryRequest, "requests-memory", "100Mi",
+		"Kubernetes container memory request")
+	generateCmd.Flags().StringVar(&cfg.MemoryLimit, "limits-memory", "",
+		"Kubernetes container memory limit")
+	generateCmd.Flags().StringVar(&cfg.CPULimit, "limits-cpu", "",
+		"Kubernetes container CPU limit")
+	generateCmd.Flags().StringVar(&cfg.CPURequest, "requests-cpu", "100m",
+		"Kubernetes container CPU request")
 }

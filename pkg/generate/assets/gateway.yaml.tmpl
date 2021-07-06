@@ -1,4 +1,4 @@
-{{ $seed := .Seed }}
+{{ $config := .Config }}
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
@@ -6,7 +6,7 @@ metadata:
   name: istio-ingressgateway
   namespace: istio-system
   labels:
-    seed: "{{ $seed }}"
+    seed: "{{ $config.Seed }}"
 spec:
   selector:
     istio: ingressgateway
@@ -16,5 +16,5 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "{{- .Host }}"
+    - "{{- $config.Hostname }}"
 ---

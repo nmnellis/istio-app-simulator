@@ -1,4 +1,4 @@
-{{ $seed := .Seed }}
+{{ $config := .Config }}
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -6,10 +6,10 @@ metadata:
   name: ingress-gw
   namespace: istio-system
   labels:
-    seed: "{{ $seed }}"
+    seed: "{{ $config.Seed }}"
 spec:
   hosts:
-    - "{{- .Host }}"
+    - "{{- $config.Hostname }}"
   gateways:
   - istio-ingressgateway
   http:
