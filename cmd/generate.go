@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/nmnellis/app-gen/pkg/generate"
 	"github.com/spf13/cobra"
-	"github.com/spf13/cobra/doc"
-	"log"
 	"os"
 )
 
@@ -26,10 +24,10 @@ var generateCmd = &cobra.Command{
 
 func Execute() {
 	// used to generate docs
-	err := doc.GenMarkdownTree(generateCmd, "docs")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// err := doc.GenMarkdownTree(generateCmd, "docs")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	if err := generateCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
