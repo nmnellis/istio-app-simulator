@@ -1,4 +1,9 @@
-package main
+package generate
+
+
+const (
+	maxAmountOfVersions = 3
+)
 
 var externalServices = []string{
 	"github.com",

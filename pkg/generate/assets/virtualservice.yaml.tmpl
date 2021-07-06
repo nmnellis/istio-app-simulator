@@ -6,11 +6,11 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - "*"
+    - "{{- .Host }}"
   gateways:
   - istio-ingressgateway
   http:
-{{- range $namespace,$microservices := .}}
+{{- range $namespace,$microservices := .Microservices}}
 {{- range $microservice := $microservices}}
 {{- if $microservice.TopTier}}
   - name: "{{$microservice.Namespace}}"
