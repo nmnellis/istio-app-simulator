@@ -29,8 +29,7 @@ type Backend struct {
 type TemplateConfig struct {
 	Microservices    map[string][]*Microservice
 	ExternalServices []string
-	Host             string
-	Seed             int64
+	Config           *Config
 }
 
 type Config struct {
@@ -45,4 +44,8 @@ type Config struct {
 	ChanceToCallExternalService   int
 	OutputDir                     string
 	Hostname                      string
+	MemoryLimit                   string
+	CPULimit                      string
+	MemoryRequest                 string
+	CPURequest                    string
 }

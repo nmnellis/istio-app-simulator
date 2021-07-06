@@ -1,4 +1,4 @@
-{{ $seed := .Seed }}
+{{ $config := .Config }}
 {{range $namespace,$microservices := .Microservices}}
 ---
 apiVersion: v1
@@ -7,7 +7,7 @@ metadata:
   name: {{$namespace}}
   labels:
     istio-injection: enabled
-    seed: "{{ $seed }}"
+    seed: "{{ $config.Seed }}"
 ---
 {{range $microservice := $microservices}}
 apiVersion: v1
@@ -18,7 +18,7 @@ metadata:
   labels:
     app: {{$microservice.Name}}
     tier: "{{$microservice.Tier}}"
-    seed: "{{ $seed }}"
+    seed: "{{ $config.Seed }}"
 ---
 apiVersion: v1
 kind: Service
@@ -28,7 +28,7 @@ metadata:
   labels:
     app: {{$microservice.Name}}
     tier: "{{$microservice.Tier}}"
-    seed: "{{ $seed }}"
+    seed: "{{ $config.Seed }}"
 spec:
   selector:
     app: {{$microservice.Name}}
@@ -48,7 +48,7 @@ metadata:
     app: {{$microservice.Name}}
     version: {{$version}}
     tier: "{{$microservice.Tier}}"
-    seed: "{{ $seed }}"
+    seed: "{{ $config.Seed }}"
 spec:
   replicas: 1
   selector:
@@ -83,6 +83,27 @@ spec:
         - name: "EXTERNAL_SERVICE_URIS"
           value: "{{ genExternalServices $microservice.ExternalServices }}"
 {{- end }}
+  {{- if or $config.MemoryRequest $config.MemoryLimit $config.CPURequest $config.CPULimit }}
+        resources:
+    {{- if or $config.MemoryLimit $config.CPULimit }}
+          limits:
+            {{- if $config.MemoryLimit }}
+            memory: {{ $config.MemoryLimit }}
+            {{- end }}
+            {{- if $config.CPULimit }}
+            cpu: {{ $config.CPULimit }}
+            {{- end }}
+    {{- end }}
+    {{- if or $config.MemoryRequest $config.CPURequest }}
+          requests:
+            {{- if $config.MemoryRequest }}
+            memory: {{ $config.MemoryRequest }}
+            {{- end }}
+            {{- if $config.CPURequest }}
+            cpu: {{ $config.CPURequest }}
+            {{- end }}
+    {{- end }}
+  {{- end }}
 ---
 {{- end }}
 {{- end }}

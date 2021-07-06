@@ -146,8 +146,7 @@ func (a *AppGenerator) render(microservices map[string][]*Microservice) error {
 	templateConfig := &TemplateConfig{
 		Microservices:    microservices,
 		ExternalServices: externalServices,
-		Host:             a.config.Hostname,
-		Seed:             a.config.Seed,
+		Config:           a.config,
 	}
 
 	gatewayFile, err := os.Create(a.config.OutputDir + "/gateway.yaml")

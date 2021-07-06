@@ -21,8 +21,12 @@ generate [flags]
       --chance-version int                   Percent chance that a given application will have multiple versions v1/v2/v3 (0-100) (default 10)
   -h, --help                                 help for generate
       --hostname string                      Hostname to use for gateway and virtualService (default "*")
+      --limits-cpu string                    Kubernetes container CPU limit
+      --limits-memory string                 Kubernetes container memory limit
   -n, --namespaces int                       Number of namespaces to generate applications for (default 1)
   -o, --output-dir string                    Output directory where assets will be generated (default "out")
+      --requests-cpu string                  Kubernetes container CPU request (default "100m")
+      --requests-memory string               Kubernetes container memory request (default "100Mi")
       --seed int                             Override random seed with static one (for deterministic outputs)
   -t, --tiers int                            Length of the application call stack per namespace (how many applications deep) (default 3)
 ```
