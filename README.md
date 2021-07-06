@@ -25,14 +25,21 @@ generate [flags]
       --hostname string                      Hostname to use for gateway and virtualService (default "*")
       --limits-cpu string                    Kubernetes container CPU limit
       --limits-memory string                 Kubernetes container memory limit
+      --limits-proxy-cpu string              Kubernetes container CPU limit (default "2")
+      --limits-proxy-memory string           Kubernetes container memory limit (default "1Gi")
   -n, --namespaces int                       Number of namespaces to generate applications for (default 1)
   -o, --output-dir string                    Output directory where assets will be generated (default "out")
       --requests-cpu string                  Kubernetes container CPU request (default "100m")
       --requests-memory string               Kubernetes container memory request (default "100Mi")
+      --requests-proxy-cpu string            Kubernetes container CPU request (default "100m")
+      --requests-proxy-memory string         Kubernetes container memory request (default "128Mi")
       --seed int                             Override random seed with static one (for deterministic outputs)
   -t, --tiers int                            Length of the application call stack per namespace (how many applications deep) (default 3)
+      --timing-50-percentile string          50% of the requested calls should return within this range (default "5ms")
+      --timing-90-percentile string          90% of the requested calls should return within this range (default "10ms")
+      --timing-99-percentile string          99% of the requested calls should return within this range (default "20ms")
+      --upstream-workers int                 Number of workers each application can utilize when calling upstream applications (default 10)
 ```
-
 
 ### Examples
 
@@ -79,6 +86,24 @@ generate [flags]
   # use the seed above to regenerate the same output
   --seed 1625582727962871000
 ```
+
+* Tuning Apps and sidecars
+```shell
+./istio-app-simulator generate \
+    -o out/cluster-1 \
+    --seed 100 \
+    -n 3 \
+    -t 7 \
+    --apps-per-tier 10 \
+    --hostname ias-cluster1.gke-test.solo.io \
+    --requests-cpu "10m" \
+    --requests-proxy-cpu "10m" \
+    --timing-50-percentile 1ms \
+    --timing-90-percentile 5ms \
+    --timing-99-percentile 50ms \ 
+    --upstream-workers 5
+```
+
 
 
 ### Fake Service UI

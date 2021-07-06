@@ -20,6 +20,7 @@ var generateCmd = &cobra.Command{
 	CompletionOptions: cobra.CompletionOptions{
 		DisableDefaultCmd: true,
 	},
+	SilenceUsage: true,
 }
 
 func Execute() {
@@ -54,7 +55,6 @@ func init() {
 		"Percent chance that a given application will make a call to an external service (0-100)")
 	generateCmd.Flags().StringVarP(&cfg.OutputDir, "output-dir", "o", "out",
 		"Output directory where assets will be generated")
-
 	generateCmd.Flags().StringVar(&cfg.MemoryRequest, "requests-memory", "100Mi",
 		"Kubernetes container memory request")
 	generateCmd.Flags().StringVar(&cfg.MemoryLimit, "limits-memory", "",
@@ -63,4 +63,20 @@ func init() {
 		"Kubernetes container CPU limit")
 	generateCmd.Flags().StringVar(&cfg.CPURequest, "requests-cpu", "100m",
 		"Kubernetes container CPU request")
+	generateCmd.Flags().StringVar(&cfg.ProxyMemoryRequest, "requests-proxy-memory", "128Mi",
+		"Kubernetes container memory request")
+	generateCmd.Flags().StringVar(&cfg.ProxyMemoryLimit, "limits-proxy-memory", "1Gi",
+		"Kubernetes container memory limit")
+	generateCmd.Flags().StringVar(&cfg.ProxyCPULimit, "limits-proxy-cpu", "2",
+		"Kubernetes container CPU limit")
+	generateCmd.Flags().StringVar(&cfg.ProxyCPURequest, "requests-proxy-cpu", "100m",
+		"Kubernetes container CPU request")
+	generateCmd.Flags().IntVar(&cfg.UpstreamWorkers, "upstream-workers", 10,
+		"Number of workers each application can utilize when calling upstream applications")
+	generateCmd.Flags().StringVar(&cfg.Timing50Percentile, "timing-50-percentile", "5ms",
+		"50% of the requested calls should return within this range")
+	generateCmd.Flags().StringVar(&cfg.Timing90Percentile, "timing-90-percentile", "10ms",
+		"90% of the requested calls should return within this range")
+	generateCmd.Flags().StringVar(&cfg.Timing99Percentile, "timing-99-percentile", "20ms",
+		"99% of the requested calls should return within this range")
 }
