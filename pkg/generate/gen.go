@@ -105,8 +105,7 @@ func (a *AppGenerator) Generate() error {
 		return microservices[i].Name < microservices[j].Name
 	})
 
-	a.render(groupMicroservicesByNamespace(microservices))
-	return nil
+	return a.render(groupMicroservicesByNamespace(microservices))
 }
 
 func groupMicroservicesByNamespace(microservices []*Microservice) map[string][]*Microservice {
@@ -117,7 +116,7 @@ func groupMicroservicesByNamespace(microservices []*Microservice) map[string][]*
 	return namespaces
 }
 
-func (a *AppGenerator) render(microservices map[string][]*Microservice) {
+func (a *AppGenerator) render(microservices map[string][]*Microservice) error {
 
 	testTemplate, err := template.New("template").Funcs(template.FuncMap{
 		"genUpstream": func(backends []*Backend) string {
@@ -134,13 +133,13 @@ func (a *AppGenerator) render(microservices map[string][]*Microservice) {
 	}).ParseGlob("pkg/generate/assets/*")
 	if err != nil {
 		log.Println(" template: ", err)
-		return
+		return err
 	}
 	if _, err := os.Stat(a.config.OutputDir); os.IsNotExist(err) {
 		err := os.Mkdir(a.config.OutputDir, os.ModePerm)
 		if err != nil {
 			log.Printf("create folder %s/: %v\n", a.config.OutputDir, err)
-			return
+			return err
 		}
 	}
 
@@ -154,47 +153,46 @@ func (a *AppGenerator) render(microservices map[string][]*Microservice) {
 	gatewayFile, err := os.Create(a.config.OutputDir + "/gateway.yaml")
 	if err != nil {
 		log.Println("create file: ", err)
-		return
+		return err
 	}
 
-	if err != nil {
-		panic(err)
+	if err := testTemplate.ExecuteTemplate(gatewayFile, "gateway.yaml.tmpl", templateConfig); err != nil {
+		return err
 	}
-	err = testTemplate.ExecuteTemplate(gatewayFile, "gateway.yaml.tmpl", templateConfig)
-	if err != nil {
-		panic(err)
-	}
+	log.Println("Generated Gateway config at " + gatewayFile.Name())
 
 	virtualserviceFile, err := os.Create(a.config.OutputDir + "/virtualservice.yaml")
 	if err != nil {
 		log.Println("create file: ", err)
-		return
+		return err
 	}
-	err = testTemplate.ExecuteTemplate(virtualserviceFile, "virtualservice.yaml.tmpl", templateConfig)
-	if err != nil {
-		panic(err)
+	if err := testTemplate.ExecuteTemplate(virtualserviceFile, "virtualservice.yaml.tmpl", templateConfig); err != nil {
+		return err
 	}
+	log.Println("Generated VirtualService config at " + virtualserviceFile.Name())
 
 	appFile, err := os.Create(a.config.OutputDir + "/app.yaml")
 	if err != nil {
 		log.Println("create file: ", err)
-		return
+		return err
 	}
-	err = testTemplate.ExecuteTemplate(appFile, "app.yaml.tmpl", templateConfig)
-	if err != nil {
-		panic(err)
+	if err := testTemplate.ExecuteTemplate(appFile, "app.yaml.tmpl", templateConfig); err != nil {
+		return err
 	}
+	log.Println("Generated App config at " + appFile.Name())
 
 	serviceEntryFile, err := os.Create(a.config.OutputDir + "/serviceentry.yaml")
 	if err != nil {
 		log.Println("create file: ", err)
-		return
+		return err
 	}
-	err = testTemplate.ExecuteTemplate(serviceEntryFile, "serviceentry.yaml.tmpl", templateConfig)
-	if err != nil {
-		panic(err)
+
+	if err := testTemplate.ExecuteTemplate(serviceEntryFile, "serviceentry.yaml.tmpl", templateConfig); err != nil {
+		return err
 	}
-	// fmt.Println(string(bytes))
+	log.Println("Generated ServiceEntry config at " + serviceEntryFile.Name())
+
+	return nil
 }
 
 func flattenTiers(tiers map[int][]*Microservice) (microservices []*Microservice) {
