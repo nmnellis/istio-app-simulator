@@ -61,4 +61,5 @@ type Config struct {
 	Timing50Percentile            string
 	Timing90Percentile            string
 	Timing99Percentile            string
+	UpstreamTimeout               string
 }

@@ -118,6 +118,10 @@ spec:
         - name: "TIMING_99_PERCENTILE"
           value: "{{ $config.Timing99Percentile }}"
 {{- end }}
+{{- if $config.UpstreamTimeout}}
+        - name: "HTTP_CLIENT_REQUEST_TIMEOUT"
+          value: "{{ $config.UpstreamTimeout }}"
+{{- end }}
   {{- if or $config.MemoryRequest $config.MemoryLimit $config.CPURequest $config.CPULimit }}
         resources:
     {{- if or $config.MemoryLimit $config.CPULimit }}

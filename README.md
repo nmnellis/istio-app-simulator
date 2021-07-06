@@ -38,6 +38,7 @@ generate [flags]
       --timing-50-percentile string          50% of the requested calls should return within this range (default "5ms")
       --timing-90-percentile string          90% of the requested calls should return within this range (default "10ms")
       --timing-99-percentile string          99% of the requested calls should return within this range (default "20ms")
+      --upstream-timeout string              Maximum duration for upstream service requests (default "2s")
       --upstream-workers int                 Number of workers each application can utilize when calling upstream applications (default 10)
 ```
 
@@ -91,16 +92,27 @@ generate [flags]
 ```shell
 ./istio-app-simulator generate \
     -o out/cluster-1 \
+    # always generate the same yaml for seed 100
     --seed 100 \
+    # number of namespaces
     -n 3 \
+    # 7 tiers of applications
     -t 7 \
     --apps-per-tier 10 \
     --hostname ias-cluster1.gke-test.solo.io \
+    # set application request cpu to 10m
     --requests-cpu "10m" \
+    # set proxy cpu request to 10m
     --requests-proxy-cpu "10m" \
+    # 50% of calls will take 1ms
     --timing-50-percentile 1ms \
+    # 90% of calls will take 5ms
     --timing-90-percentile 5ms \
-    --timing-99-percentile 50ms \ 
+    # 99% of calls will take 50ms
+    --timing-99-percentile 50ms \
+    # request timeout after 5s
+    --upstream-timeout 5s \
+    # 5 upstream workers per application
     --upstream-workers 5
 ```
 

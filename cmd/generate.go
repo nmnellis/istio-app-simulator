@@ -79,4 +79,6 @@ func init() {
 		"90% of the requested calls should return within this range")
 	generateCmd.Flags().StringVar(&cfg.Timing99Percentile, "timing-99-percentile", "20ms",
 		"99% of the requested calls should return within this range")
+	generateCmd.Flags().StringVar(&cfg.UpstreamTimeout, "upstream-timeout", "2s",
+		"Maximum duration for upstream service requests")
 }

@@ -36,6 +36,7 @@ generate [flags]
       --timing-50-percentile string          50% of the requested calls should return within this range (default "5ms")
       --timing-90-percentile string          90% of the requested calls should return within this range (default "10ms")
       --timing-99-percentile string          99% of the requested calls should return within this range (default "20ms")
+      --upstream-timeout string              Maximum duration for upstream service requests (default "2s")
       --upstream-workers int                 Number of workers each application can utilize when calling upstream applications (default 10)
 ```
 
