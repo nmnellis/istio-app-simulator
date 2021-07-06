@@ -65,17 +65,17 @@ jobs:
           zip -j istio_app_simulator_darwin_arm64.zip ./bin/darwin/arm64/istio-app-simulator
           zip -j istio_app_simulator_windows_amd64.zip ./bin/windows/istio-app-simulator.exe
 
-      - name: Create Release
-        id: create_release
-        if: contains(github.ref, 'v')
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+#      - name: Create Release
+#        id: create_release
+#        if: contains(github.ref, 'v')
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ github.ref }}
+#          release_name: Release ${{ github.ref }}
+#          draft: false
+#          prerelease: false
 
       - name: Upload Release Asset Linux Amd64
         if: contains(github.ref, 'v')
