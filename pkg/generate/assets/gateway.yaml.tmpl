@@ -1,9 +1,12 @@
+{{ $seed := .Seed }}
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: istio-ingressgateway
   namespace: istio-system
+  labels:
+    seed: "{{ $seed }}"
 spec:
   selector:
     istio: ingressgateway

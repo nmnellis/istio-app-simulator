@@ -27,9 +27,10 @@ type Backend struct {
 }
 
 type TemplateConfig struct {
-	Microservices map[string][]*Microservice
+	Microservices    map[string][]*Microservice
 	ExternalServices []string
-	Host string
+	Host             string
+	Seed             int64
 }
 
 type Config struct {

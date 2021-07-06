@@ -60,6 +60,23 @@ generate [flags]
   --app-error-percent 0.25
 ```
 
+* Recreating an output - there are times you might want to recreate a users setup. All assets are labeled with a seed value. simply use the seed in your cmd
+```shell
+# Example namespace
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: ns-1
+#   labels:
+#     istio-injection: enabled
+#     seed: "1625582727962871000"
+
+./istio-app-simulator generate \
+  # use the seed above to regenerate the same output
+  --seed 1625582727962871000
+```
+
+
 ### Fake Service UI
 You can reach a UI for the fake service call stack by using kubernetes port forwarding to the tier 1 service in the namespace
 ```shell

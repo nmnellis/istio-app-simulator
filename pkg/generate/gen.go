@@ -27,13 +27,12 @@ func NewAppGenerator(config *Config) *AppGenerator {
 
 func (a *AppGenerator) Generate() error {
 
-	seed := a.config.Seed
 	// if unset, make random
-	if seed == 0 {
-		seed = time.Now().UnixNano()
+	if a.config.Seed == 0 {
+		a.config.Seed = time.Now().UnixNano()
 	}
 
-	rand.Seed(seed)
+	rand.Seed(a.config.Seed)
 	// generate namespaces
 	// namespace names will be very simple ns1, ns2 etc
 	var microservices []*Microservice
@@ -149,6 +148,7 @@ func (a *AppGenerator) render(microservices map[string][]*Microservice) {
 		Microservices:    microservices,
 		ExternalServices: externalServices,
 		Host:             a.config.Hostname,
+		Seed:             a.config.Seed,
 	}
 
 	gatewayFile, err := os.Create(a.config.OutputDir + "/gateway.yaml")

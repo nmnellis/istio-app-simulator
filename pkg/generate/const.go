@@ -1,6 +1,5 @@
 package generate
 
-
 const (
 	maxAmountOfVersions = 3
 )
