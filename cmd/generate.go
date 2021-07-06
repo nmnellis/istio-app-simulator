@@ -1,8 +1,12 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/nmnellis/app-gen/pkg/generate"
 	"github.com/spf13/cobra"
+	"github.com/spf13/cobra/doc"
+	"log"
+	"os"
 )
 
 var cfg = &generate.Config{}
@@ -15,11 +19,24 @@ var generateCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return generate.NewAppGenerator(cfg).Generate()
 	},
+	CompletionOptions: cobra.CompletionOptions{
+		DisableDefaultCmd: true,
+	},
+}
+
+func Execute() {
+	// used to generate docs
+	err := doc.GenMarkdownTree(generateCmd, "docs")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := generateCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 
 func init() {
-	rootCmd.AddCommand(generateCmd)
-
 	generateCmd.Flags().StringVar(&cfg.Hostname, "hostname", "*", "Hostname to use for gateway and virtualService")
 	generateCmd.Flags().Int64Var(&cfg.Seed, "seed", 0, "Override random seed with static one (for deterministic outputs)")
 	generateCmd.Flags().IntVarP(&cfg.NumberOfNamespaces, "namespaces", "n", 1, "Number of namespaces to generate applications for")

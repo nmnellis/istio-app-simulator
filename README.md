@@ -1,4 +1,4 @@
-## app-gen generate
+# istio-app-simulator generate
 
 generate kubernetes yaml for applications
 
@@ -9,7 +9,7 @@ generate kubernetes yaml for applications
 This application generates kubernetes yaml that sets up complex application networks for a given amount of namespaces. 
 
 ```
-app-gen generate [flags]
+generate [flags]
 ```
 
 ### Options
@@ -34,7 +34,7 @@ app-gen generate [flags]
 
 * Overriding default values
 ```shell
-app-gen generate \
+./istio-app-simulator generate \
   # only generate 3 namespaces
   # namespaces are named ns-1, ns-2, ns-3
   --namespaces 3 \ 
@@ -48,7 +48,7 @@ app-gen generate \
 
 * Manipulating chances
 ```shell
-app-gen generate \
+./istio-app-simulator generate \
   # every application will call some external service
   --chance-call-external 100 \ 
   # half of all applications will call an application in another namespace

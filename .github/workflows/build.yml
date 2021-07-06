@@ -28,13 +28,13 @@ jobs:
 
       - name: Build
         run: |
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/linux/amd64/app-gen
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o bin/linux/arm64/app-gen
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o bin/linux/arm6/app-gen
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o bin/linux/arm7/app-gen
-          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o bin/darwin/amd64/app-gen
-          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -o bin/darwin/arm64/app-gen
-          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o bin/windows/app-gen.exe
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/linux/amd64/istio-app-simulator
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o bin/linux/arm64/istio-app-simulator
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o bin/linux/arm6/istio-app-simulator
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o bin/linux/arm7/istio-app-simulator
+          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o bin/darwin/amd64/istio-app-simulator
+          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -o bin/darwin/arm64/istio-app-simulator
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o bin/windows/istio-app-simulator.exe
 
       - uses: actions/upload-artifact@v2
         with:
@@ -57,13 +57,13 @@ jobs:
 
       - name: Zip binaries
         run: |
-          zip -j app_gen_linux_amd64.zip ./bin/linux/amd64/app-gen
-          zip -j app_gen_linux_arm64.zip ./bin/linux/arm64/app-gen
-          zip -j app_gen_linux_arm6.zip ./bin/linux/arm6/app-gen
-          zip -j app_gen_linux_arm7.zip ./bin/linux/arm7/app-gen
-          zip -j app_gen_darwin_amd64.zip ./bin/darwin/amd64/app-gen
-          zip -j app_gen_darwin_arm64.zip ./bin/darwin/arm64/app-gen
-          zip -j app_gen_windows_amd64.zip ./bin/windows/app-gen.exe
+          zip -j istio_app_simulator_linux_amd64.zip ./bin/linux/amd64/istio-app-simulator
+          zip -j istio_app_simulator_linux_arm64.zip ./bin/linux/arm64/istio-app-simulator
+          zip -j istio_app_simulator_linux_arm6.zip ./bin/linux/arm6/istio-app-simulator
+          zip -j istio_app_simulator_linux_arm7.zip ./bin/linux/arm7/istio-app-simulator
+          zip -j istio_app_simulator_darwin_amd64.zip ./bin/darwin/amd64/istio-app-simulator
+          zip -j istio_app_simulator_darwin_arm64.zip ./bin/darwin/arm64/istio-app-simulator
+          zip -j istio_app_simulator_windows_amd64.zip ./bin/windows/istio-app-simulator.exe
 
       - name: Create Release
         id: create_release
@@ -84,8 +84,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app_gen_linux_amd64.zip
-          asset_name: app_gen_linux_amd64.zip
+          asset_path: ./istio_app_simulator_linux_amd64.zip
+          asset_name: istio_app_simulator_linux_amd64.zip
           asset_content_type: application/zip
 
       - name: Upload Release Asset Linux Arm6
@@ -95,8 +95,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app_gen_linux_arm6.zip
-          asset_name: app_gen_linux_arm6.zip
+          asset_path: ./istio_app_simulator_linux_arm6.zip
+          asset_name: istio_app_simulator_linux_arm6.zip
           asset_content_type: application/zip
 
       - name: Upload Release Asset Linux Arm7
@@ -106,8 +106,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app_gen_linux_arm7.zip
-          asset_name: app_gen_linux_arm7.zip
+          asset_path: ./istio_app_simulator_linux_arm7.zip
+          asset_name: istio_app_simulator_linux_arm7.zip
           asset_content_type: application/zip
       
       - name: Upload Release Asset Linux Arm64
@@ -117,8 +117,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app_gen_linux_arm64.zip
-          asset_name: app_gen_linux_arm64.zip
+          asset_path: ./istio_app_simulator_linux_arm64.zip
+          asset_name: istio_app_simulator_linux_arm64.zip
           asset_content_type: application/zip
       
       - name: Upload Release Asset Darwin Amd64
@@ -128,8 +128,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app_gen_darwin_amd64.zip
-          asset_name: app_gen_darwin_amd64.zip
+          asset_path: ./istio_app_simulator_darwin_amd64.zip
+          asset_name: istio_app_simulator_darwin_amd64.zip
           asset_content_type: application/zip
       
       - name: Upload Release Asset Darwin Arm64
@@ -139,8 +139,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app_gen_darwin_arm64.zip
-          asset_name: app_gen_darwin_arm64.zip
+          asset_path: ./istio_app_simulator_darwin_arm64.zip
+          asset_name: istio_app_simulator_darwin_arm64.zip
           asset_content_type: application/zip
 
       - name: Upload Release Asset Windows Amd64
@@ -150,6 +150,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app_gen_windows_amd64.zip
-          asset_name: app_gen_windows_amd64.zip
+          asset_path: ./istio_app_simulator_windows_amd64.zip
+          asset_name: istio_app_simulator_windows_amd64.zip
           asset_content_type: application/zip
