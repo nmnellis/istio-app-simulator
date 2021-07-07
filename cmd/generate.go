@@ -40,7 +40,7 @@ func init() {
 	generateCmd.Flags().Int64Var(&cfg.Seed, "seed", 0, "Override random seed with static one (for deterministic outputs)")
 	generateCmd.Flags().IntVarP(&cfg.NumberOfNamespaces, "namespaces", "n", 1, "Number of namespaces to generate applications for")
 	generateCmd.Flags().IntVarP(&cfg.NumberOfTiers, "tiers", "t", 3, "Length of the application call stack per namespace ("+
-		"how many applications deep)")
+		"how many applications deep, randomly chosen per namespace 2 < x )")
 	generateCmd.Flags().IntVar(&cfg.MaxAppsPerTier, "apps-per-tier", 5, "Max amount of applications that can exist in a given tier. "+
 		"Will randomly pick between 1 < x")
 	generateCmd.Flags().IntVar(&cfg.ChanceOfVersions, "chance-version", 10,
@@ -79,6 +79,6 @@ func init() {
 		"90% of the requested calls should return within this range")
 	generateCmd.Flags().StringVar(&cfg.Timing99Percentile, "timing-99-percentile", "20ms",
 		"99% of the requested calls should return within this range")
-	generateCmd.Flags().StringVar(&cfg.UpstreamTimeout, "upstream-timeout", "2s",
+	generateCmd.Flags().StringVar(&cfg.UpstreamTimeout, "upstream-timeout", "30s",
 		"Maximum duration for upstream service requests")
 }

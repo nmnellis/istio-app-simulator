@@ -39,12 +39,12 @@ func (a *AppGenerator) Generate() error {
 	for i := 1; i <= a.config.NumberOfNamespaces; i++ {
 		namespaceName := fmt.Sprintf("ns-%d", i)
 
-		// TODO right now its just easier to have 1 microservice entry point per namespace
-
+		// randomly select the number of tiers in this ns, 2 < max
+		numberOfTiers := rand.Intn(a.config.NumberOfTiers) + 2
 		// namespaces[namespaceName] =
 		// generate tiers in reverse order so we can connect them to parents
 		tiers := map[int][]*Microservice{}
-		for tier := a.config.NumberOfTiers; tier > 0; tier-- {
+		for tier := numberOfTiers; tier > 0; tier-- {
 
 			if tier == 1 {
 				// top tier
