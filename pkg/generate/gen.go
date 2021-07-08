@@ -122,7 +122,7 @@ func (a *AppGenerator) render(microservices map[string][]*Microservice) error {
 		"genUpstream": func(backends []*Backend) string {
 			var hostnames []string
 			for _, backend := range backends {
-				hostnames = append(hostnames, fmt.Sprintf("http://%s.%s:8080", backend.Name, backend.Namespace))
+				hostnames = append(hostnames, fmt.Sprintf("http://%s.%s.svc.cluster.local.:8080", backend.Name, backend.Namespace))
 			}
 
 			return strings.Join(hostnames, ",")
