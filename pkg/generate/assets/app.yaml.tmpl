@@ -87,6 +87,8 @@ spec:
         image: ghcr.io/nmnellis/fake-service:v2
         ports:
         - containerPort: 8080
+        securityContext:
+          runAsUser: 1001
         env:
         - name: "LISTEN_ADDR"
           value: "0.0.0.0:8080"
