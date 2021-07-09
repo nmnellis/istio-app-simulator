@@ -4,6 +4,16 @@ generate kubernetes yaml for applications
 
 ![Kiali UI](./docs/kiali-ui.png)
 
+## To Install
+
+```shell
+# latest version
+curl -sL https://raw.githubusercontent.com/nmnellis/istio-app-simulator/main/install.sh | sh -
+# specific version
+curl -sL https://raw.githubusercontent.com/nmnellis/istio-app-simulator/main/install.sh | APP_VERSION=${APP_VERSION} sh -
+```
+
+
 ### Synopsis
 
 This application generates kubernetes yaml that sets up complex application networks for a given amount of namespaces. 
@@ -46,7 +56,7 @@ generate [flags]
 
 * Overriding default values
 ```shell
-./istio-app-simulator generate \
+ias generate \
   # only generate 3 namespaces
   # namespaces are named ns-1, ns-2, ns-3
   --namespaces 3 \ 
@@ -60,7 +70,7 @@ generate [flags]
 
 * Manipulating chances
 ```shell
-./istio-app-simulator generate \
+ias generate \
   # every application will call some external service
   --chance-call-external 100 \ 
   # half of all applications will call an application in another namespace
@@ -83,14 +93,14 @@ generate [flags]
 #     istio-injection: enabled
 #     seed: "1625582727962871000"
 
-./istio-app-simulator generate \
+ias generate \
   # use the seed above to regenerate the same output
   --seed 1625582727962871000
 ```
 
 * Tuning Apps and sidecars
 ```shell
-./istio-app-simulator generate \
+ias generate \
     -o out/cluster-1 \
     # always generate the same yaml for seed 100
     --seed 100 \
