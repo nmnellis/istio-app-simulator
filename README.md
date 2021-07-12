@@ -134,6 +134,8 @@ You can reach a UI for the fake service call stack by using kubernetes port forw
 kubectl get svc -n ns-1 -l tier=1
 
 kubectl port-forward svc/<tier—1-service> -n ns-1 9080:8080
-```
 
+# open localhost:9080/ui/
+```
+[Fake Service UI](http://localhost:8090/ui/)
 ![Kiali UI](./docs/fake-service-ui.png)
